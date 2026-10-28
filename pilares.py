@@ -129,6 +129,32 @@ class Pasta(Item):
         for filho in self.__filhos:
             filho.mostrar()
 
+class Atalho(Item):
+    __slots__ = ("__destino",)
+
+    def __init__(self, nome, destino, pai=None):
+        super().__init__(nome, pai)
+        self.redirecionar(destino)
+
+    @property
+    def destino(self):
+        return self.__destino
+
+    def redirecionar(self, novo_destino):
+        ancestral = self
+        while ancestral is not None:
+            if ancestral is novo_destino:
+                raise ValueError("o atalho " + self.nome + " não pode apontar para " + novo_destino.nome)
+            ancestral = ancestral.pai
+        self.__destino = novo_destino
+
+    def tamanho(self):
+        return 1
+
+    def mostrar(self):
+        recuo = "    " * self.profundidade()
+        print(recuo + self.nome + " -> " + self.__destino.caminho())
+    
 
 # Outra classe que assina o contrato SEM ser da árvore: a Lixeira.
 class Lixeira(Medivel):
