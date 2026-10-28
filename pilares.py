@@ -186,4 +186,27 @@ def tentar(rotulo, acao):
         acao()
         print(rotulo, "-> passou (!)")
     except Exception as erro:
-        print(rotulo, "->", type(erro).__name__ + ":", erro)  
+        print(rotulo, "->", type(erro).__name__ + ":", erro) 
+
+
+
+disco = Pasta("C:")
+usuarios = Pasta("Users", disco)
+joyce = Pasta("joyce", usuarios)
+desktop = Pasta("Desktop", joyce)
+documentos = Pasta("Documentos", joyce)
+relatorio = Arquivo("relatorio.pdf", 3000, documentos)
+foto = Arquivo("foto.png", 2000, documentos)
+anotacoes = Arquivo("anotacoes.txt", 150, desktop)
+atalho_relatorio = Atalho("relatorio.lnk", relatorio, desktop)
+atalho_documentos = Atalho("Documentos.lnk", documentos, desktop)
+
+disco.mostrar()
+
+lixeira = Lixeira()
+lixeira.descartar(Arquivo("rascunho.txt", 40))
+print(espaco_total([foto, desktop, lixeira]))   # 2000 + (150 + 1 + 1) + 40 = 2192
+
+tentar("atalho.destino = foto", lambda: setattr(atalho_relatorio, "destino", foto))
+tentar("atalho p/ si mesmo", lambda: atalho_relatorio.redirecionar(atalho_relatorio))
+tentar("atalho p/ a pasta onde ele está", lambda: atalho_documentos.redirecionar(desktop))
